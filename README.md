@@ -12,7 +12,7 @@
 - `analyze(..., analysis = :throughput | :latency)`
 
 ```julia
-julia> include("IACA.jl")
+julia> using IACA
 
 julia> function f(y::Float64)
     x = 0.0

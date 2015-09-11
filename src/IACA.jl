@@ -1,3 +1,5 @@
+module IACA
+
 macro iaca(x)
     begin_tag = if isa(x, Expr) && (x.head in (:for, :while))
         :iaca_begin_loop
@@ -74,3 +76,6 @@ function analyze(f, args::Type; arch = :haswell, analysis = :throughput, iaca_pa
     readall(`$iaca_path -$WORD_SIZE -arch $(ARCH_NAMES[arch]) -analysis $(ANALYSIS_TYPE[analysis]) $name`)
 end
 
+export @iaca, analyze
+
+end

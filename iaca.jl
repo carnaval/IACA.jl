@@ -10,13 +10,13 @@ end
 llvmcall_asm(s) = Expr(:call, Base.llvmcall, "call void asm sideeffect \"$s\",\"\"()\nret void", Void, Tuple{})
 const IACA_BEGIN = ".byte 0x0F, 0x0B\nmovl \$\$111, %ebx\n.byte 0x64, 0x67, 0x90"
 const IACA_END = "movl \$\$222, %ebx\n.byte 0x64, 0x67, 0x90\n.byte 0x0F, 0x0B"
-const ARCH_NAMES = [:haswell => "HSW",
-                    :ivy_bridge => "IVB",
-                    :sandy_bridge => "SNB",
-                    :westmere => "WSM",
-                    :nehalem => "NHM"]
-const ANALYSIS_TYPE = [:latency => "LATENCY",
-                       :throughput => "THROUGHPUT"]
+const ARCH_NAMES = Dict(:haswell => "HSW",
+                        :ivy_bridge => "IVB",
+                        :sandy_bridge => "SNB",
+                        :westmere => "WSM",
+                        :nehalem => "NHM")
+const ANALYSIS_TYPE = Dict(:latency => "LATENCY",
+                           :throughput => "THROUGHPUT")
 function analyze(f, args::Type; arch = :haswell, analysis = :throughput, iaca_path = "iaca.sh")
     m = which(f, args)
     li = m.func.code
@@ -74,23 +74,3 @@ function analyze(f, args::Type; arch = :haswell, analysis = :throughput, iaca_pa
     readall(`$iaca_path -$WORD_SIZE -arch $(ARCH_NAMES[arch]) -analysis $(ANALYSIS_TYPE[analysis]) $name`)
 end
 
-function f(y::Float64)
-    x = 0.0
-    @iaca for i=1:100
-        x += 2*y*i
-    end
-    x
-end
-function g(y::Float64)
-    x1 = x2 = x3 = x4 = x5 = x6 = x7 = 0.0
-    @iaca for i=1:7:100
-        x1 += 2*y*i
-        x2 += 2*y*(i+1)
-        x3 += 2*y*(i+2)
-        x4 += 2*y*(i+3)
-        x5 += 2*y*(i+4)
-        x6 += 2*y*(i+5)
-        x7 += 2*y*(i+6)
-    end
-    x1 + x2 + x3 + x4 + x5 + x6 + x7
-end

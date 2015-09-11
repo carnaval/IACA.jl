@@ -1,6 +1,7 @@
-### Rough work in progress.
+### rough work in progress
 
 ### steps
+- use a version of Julia at least as new as 7897a9131bf
 - install IACA <https://software.intel.com/en-us/articles/intel-architecture-code-analyzer-download>
 - add `@iaca` macro around a loop or straight code
 - run `analyze(f, sig)`
@@ -11,7 +12,7 @@
 - `analyze(..., analysis = :throughput | :latency)`
 
 ```julia
-julia> include("iaca.jl")
+julia> include("IACA.jl")
 
 julia> function f(y::Float64)
     x = 0.0

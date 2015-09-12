@@ -22,7 +22,7 @@ const ANALYSIS_TYPE = Dict(:latency => "LATENCY",
 function analyze(f, args::Type; arch = :haswell, analysis = :throughput, iaca_path = "iaca.sh")
     m = which(f, args)
     li = m.func.code
-    ast = deepcopy(Base.uncompressed_ast(li))
+    ast = ccall(:jl_copy_ast, Any, (Any,), Base.uncompressed_ast(li))
     body = ast.args[3].args
     next_label = false
     pc = 1
